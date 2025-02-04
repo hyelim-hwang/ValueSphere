@@ -45,7 +45,8 @@ namespace SS.Scenario {
                 //snapshot function
                 bool isHighlight(SSCameraPerson cam) {
                     SSSphereHandleScenario scenario =
-                        (SSSphereHandleScenario)SSSphereHandleScenario.getSingleton();
+                        (SSSphereHandleScenario)SSSphereHandleScenario.
+                        getSingleton();
                     SSValueSphereMgr valueSphereMgr =
                         ((SSApp)scenario.getApp()).getValueSphereMgr();
                     SSApp ss = (SSApp)scenario.getApp();

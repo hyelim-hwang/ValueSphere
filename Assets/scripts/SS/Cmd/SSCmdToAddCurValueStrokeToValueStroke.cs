@@ -24,7 +24,7 @@ namespace SS.Cmd {
         protected override bool defineCmd() {
             SSApp ss = (SSApp)this.mApp;
             SSValueStroke curValueStroke =
-            ss.getValueStrokeMgr().getCurValueStroke();
+                ss.getValueStrokeMgr().getCurValueStroke();
             SSPolyline2D polyline = (SSPolyline2D)curValueStroke.getGeom();
             if (polyline.getPts().Count >= 2) {
                 ss.getValueStrokeMgr().getValueStrokes().Add(curValueStroke);

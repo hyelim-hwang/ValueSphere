@@ -17,8 +17,10 @@ namespace SS.Scenario {
 
         private SSDrawScenario(XApp app) : base(app) {
         }
+
         protected override void addScenes() {
             this.addScene(SSDrawScenario.DrawScene.createSingleton(this));
+            this.addScene(SSDrawScenario.DrawShadowScene.createSingleton(this));
         }
     }
 }

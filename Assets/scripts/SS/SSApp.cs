@@ -1,6 +1,10 @@
 using SS.AppObject;
+using SSAppObject;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using X;
+
 
 namespace SS {
     public class SSApp : XApp {
@@ -26,6 +30,7 @@ namespace SS {
         public SSPenMarkMgr getPenMarkMgr() {
             return this.mPenMarkMgr;
         }
+        //camera
         private SSPerspCameraPerson mPerspCameraPerson = null;
         public SSPerspCameraPerson getPerspCameraPerson () {
             return this.mPerspCameraPerson;
@@ -33,6 +38,14 @@ namespace SS {
         private SSOrthoCameraPerson mOrthoCameraPerson = null;
         public SSOrthoCameraPerson getOrthoCameraPerson() {
             return this.mOrthoCameraPerson;
+        }
+        private SSGridCameraPerson mGridCameraPerson = null;
+        public SSGridCameraPerson getGridCameraPerson() {
+            return this.mGridCameraPerson;
+        }
+        private SSCropCameraPerson mCropCameraPerson = null;
+        public SSCropCameraPerson getCropCameraPerson() {
+            return this.mCropCameraPerson;
         }
         private SSCursorMgr mCursorMgr = null;
         public SSCursorMgr getCursorMgr() {
@@ -46,6 +59,7 @@ namespace SS {
         public SSLightSourceMgr getLightSourceMgr() {
             return this.mLightSourceMgr;
         }
+        //valueSphere
         private SSValueSphereMgr mValueSphereMgr = null;
         public SSValueSphereMgr getValueSphereMgr() {
             return this.mValueSphereMgr;
@@ -54,15 +68,37 @@ namespace SS {
         public SSValueStrokeMgr getValueStrokeMgr() {
             return this.mValueStrokeMgr;
         }
+        //ShadowStick
+        private SSPerspectiveCubeMgr mPerspectiveCubeMgr = null;
+        public SSPerspectiveCubeMgr getSSPerspectiveCubeMgr() {
+            return this.mPerspectiveCubeMgr;
+        }
+        public void setSSPerspectiveCubeMgr(SSPerspectiveCubeMgr cubeMgr) {
+            this.mPerspectiveCubeMgr = cubeMgr;
+        }
+        private SSShadowStickMgr mShadowStickMgr = null;
+        public SSShadowStickMgr getShadowStickMgr() {
+            return this.mShadowStickMgr;
+        }
+        private SSShadowTraceMgr mShadowTraceMgr = null;
+        public SSShadowTraceMgr getShadowTraceMgr() {
+            return this.mShadowTraceMgr;
+        }
         private SSSnapshotMgr mSnapshotMgr = null;
         public SSSnapshotMgr getSnapshotMgr() {
             return this.mSnapshotMgr;
         }
+        private SSShadowCurveMgr mShadowCurveMgr = null;
+        public SSShadowCurveMgr getShadowCurveMgr() {
+            return this.mShadowCurveMgr;
+        }
+
 
         private SSKeyEventSource mKeyEventSource = null;
         private SSPenEventSource mPenEventSource = null;
         private SSTouchEventSource mTouchEventSource = null;
         private SSEventListener mEventListener = null;
+
 
         private SSImage2D mHairdryerUnderlay = null;
         public SSImage2D getHairdryerUnderlay() {
@@ -76,6 +112,15 @@ namespace SS {
         public SSImage2D getBuildingUnderlay() {
             return this.mBuildingUnderlay;
         }
+        private SSImage2D mCylinderUnderlay = null;
+        public SSImage2D getCylinderUnderlay() {
+            return this.mCylinderUnderlay;
+        }
+        public RenderTexture renderTexture = null;
+        public SSAppTexturedRect3D mCropTexture = null;
+
+
+
 
         private void configureUnity() {
             // necessary for manually refreshing collider physics
@@ -96,6 +141,7 @@ namespace SS {
             Physics.queriesHitBackfaces = true;
         }
 
+
         private void Start() {
             this.configureUnity();
             //unity physics options
@@ -109,6 +155,10 @@ namespace SS {
             this.mPerspCameraPerson = new SSPerspCameraPerson();
             Camera.main.useOcclusionCulling = false;
             this.mOrthoCameraPerson = new SSOrthoCameraPerson();
+            this.mOrthoCameraPerson.getCamera().clearFlags =
+                CameraClearFlags.Depth;
+            this.mGridCameraPerson = new SSGridCameraPerson();
+            // this.mCropCameraPerson = new SSCropCameraPerson(this);
             //penmark & touchmark
             this.mPenMarkMgr = new SSPenMarkMgr();
             this.mTouchMarkMgr = new SSTouchMarkMgr();
@@ -130,27 +180,99 @@ namespace SS {
             this.mLightSourceMgr = new SSLightSourceMgr(this);
             // underlay
             Vector2 screenSize = new Vector2(Screen.width, Screen.height);
-            Vector2 screenSize2 = new Vector2(Screen.width / 1.5f, Screen.height);
-            Vector2 screenSize3 = new Vector2(Screen.width / 1.2f, Screen.height/1.2f);
+            Vector2 screenSize2 =
+            new Vector2(Screen.width / 1.5f, Screen.height);
+            Vector2 screenSize3 =
+            new Vector2(Screen.width / 1.2f, Screen.height / 1.2f);
+            Vector2 screenSize4 = new Vector2(837f, 814f);
+            Vector2 screenSize5 = new Vector2(682f, 925f);
+            Vector2 screenSize6 = new Vector2(1358f, 1793f);
+            Vector2 screenSize7 = new Vector2(1620, 1471f);
+            Vector2 screenSize8 = new Vector2(2923, 1744);
+            Vector2 screenSize9 = new Vector2(372, 346);
+            Vector2 screenSize10 = new Vector2(246, 407);
+            Vector2 screenSize11 = new Vector2(265, 364);
+            Vector2 screenSize12 = new Vector2(1020, 1344);
             this.mHairdryerUnderlay = new SSImage2D("Underlay", "hairdryer",
                 screenSize3, screenSize / 2.0f - new Vector2(20.0f, 0));
-            this.mHairdryerUnderlay.getGameObject().SetActive(true);
+            this.mHairdryerUnderlay.getGameObject().SetActive(false);
             this.mRobotUnderlay = new SSImage2D("Underlay", "robot",
                 screenSize2, screenSize / 2f);
             this.mRobotUnderlay.getGameObject().SetActive(false);
             this.mBuildingUnderlay = new SSImage2D("Underlay", "building",
                 screenSize, screenSize / 2f);
             this.mBuildingUnderlay.getGameObject().SetActive(false);
+            this.mCylinderUnderlay = new SSImage2D("Underlay", "cylinder",
+                screenSize4, new Vector3(1627f, 585f, 0f));
+            this.mCylinderUnderlay.getGameObject().SetActive(false);
+            this.mCylinderUnderlay = new SSImage2D("Underlay", "cylinder_floating",
+                screenSize5, new Vector3(1627f, 585f, 0f));
+            this.mCylinderUnderlay.getGameObject().SetActive(false);
+            this.mCylinderUnderlay = new SSImage2D("Underlay", "foating_cube",
+                screenSize6, new Vector3(1627f, 585f, 0f));
+            this.mCylinderUnderlay.getGameObject().SetActive(false);
+            this.mCylinderUnderlay = new SSImage2D("Underlay", "cylinder_lay",
+                screenSize7, new Vector3(1627f, 585f, 0f));
+            this.mCylinderUnderlay.getGameObject().SetActive(false);
+            this.mCylinderUnderlay = new SSImage2D("Underlay", "composition",
+                screenSize8, new Vector3(1627f, 585f, 0f));
+            this.mCylinderUnderlay.getGameObject().SetActive(false);
+            this.mCylinderUnderlay = new SSImage2D("Underlay", "cube_floor",
+                screenSize9, new Vector3(1627f, 585f, 0f));
+            this.mCylinderUnderlay.getGameObject().SetActive(false);
+            this.mCylinderUnderlay = new SSImage2D("Underlay", "cone_floor",
+                screenSize9, new Vector3(1627f, 585f, 0f));
+            this.mCylinderUnderlay.getGameObject().SetActive(false);
+            this.mCylinderUnderlay = new SSImage2D("Underlay", "cone_floating",
+                screenSize10, new Vector3(1627f, 585f, 0f));
+            this.mCylinderUnderlay.getGameObject().SetActive(false);
+            this.mCylinderUnderlay = new SSImage2D("Underlay", "conCube_big",
+                screenSize11, new Vector3(1627f, 585f, 0f));
+            this.mCylinderUnderlay.getGameObject().SetActive(false);
+            this.mCylinderUnderlay = new SSImage2D("Underlay", "cubeTower",
+                screenSize12, new Vector3(1627f, 585f, 0f));
+            this.mCylinderUnderlay.getGameObject().SetActive(true);
+
+
+            //perspectiveCube
+            Plane plane = new Plane(Vector3.up, Vector3.zero);
+            this.mPerspectiveCubeMgr = new SSPerspectiveCubeMgr(this);
+            this.mPerspectiveCubeMgr.makeGridTransparent();
+
+
+            //ShadowStick
+            this.mShadowTraceMgr = new SSShadowTraceMgr(this);
+            this.mShadowStickMgr = new SSShadowStickMgr(this);
+            this.mShadowCurveMgr = new SSShadowCurveMgr(this);
+            this.mShadowStickMgr.setPlane(plane);
+            SSStick stick = new SSStick("stick", plane,
+                SSShadowStickMgr.CONE_FLOOR_DIR);
+            this.mShadowStickMgr.setShadowStick(stick);
+
+            // //crop camera
+            // // SSAppTexturedRect3D 생성
+            // this.mCropTexture = new SSAppTexturedRect3D("TexturedRect", 3f, 2f);
+            // renderTexture = new RenderTexture(1920 * 4, 1080 * 4, 32);
+            // renderTexture.Create();
+            // // 텍스처 설정
+            // this.mCropCameraPerson.getCamera().targetTexture = renderTexture;
+            // this.mCropTexture.setTexture(renderTexture);
+            // // 텍스처 크롭 비율 설정 (50% 영역만 표시)
+            // this.mCropTexture.setTextureCropRatio(new Vector2(1f, 1f));
+            // // 텍스처 오프셋 설정 (텍스처의 왼쪽 위를 기준으로 표시)
+            // this.mCropTexture.setTextureOffset(Vector2.zero);
+
             //undo & redo
             this.mSnapshotMgr = new SSSnapshotMgr(this);
         }
+
 
         private void Update() {
             this.mOrthoCameraPerson.update();
             this.mKeyEventSource.update();
             this.mPenEventSource.update();
             this.mTouchEventSource.update();
-
         }
     }
 }
+

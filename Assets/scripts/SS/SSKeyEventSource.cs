@@ -6,9 +6,10 @@ namespace SS {
         //constants
         private static readonly List<Key> WATCHING_KEYS =
             new List<Key>() {
+                Key.Tab, // for creating shadow trace
                 Key.LeftCtrl, // for rotating
                 Key.LeftAlt, // for translating
-                Key.Enter, // for creating a standing card
+                Key.Enter, // for confirm the plane
                 Key.Z, // undo
                 Key.Y, // redo
                 Key.S, // for saving file
@@ -20,7 +21,8 @@ namespace SS {
                 Key.H, //for calling hairdryer file
                 Key.E, //for erasing valuestrokes
                 Key.C, //for clear all the valuestrokes
-                Key.R //for calling robot file
+                Key.R, //for calling robot file
+                Key.P //for entering ShadowStick mode
             };
 
         //fields

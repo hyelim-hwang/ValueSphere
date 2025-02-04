@@ -119,18 +119,18 @@ namespace SS.AppObject {
             float BValue = bla.b;
             //Debug.LogWarning("setted with:" + bla);
             bool isInGreyScale = (RValue - GValue) < 0.3;
-            // while (!isInGreyScale && (maxIteration > 0)) {
-            //     int newCoordX = (int)valueCoord.x + 10;
-            //     int newCoordY = (int)valueCoord.y + 10;
-            //     bla = screenshot.GetPixel(newCoordX, newCoordY);
-            //     RValue = bla.r;
-            //     GValue = bla.g;
-            //     BValue = bla.b;
-            //     isInGreyScale = (RValue - GValue) < 0.3;
-            //     // RValue = bla.r;
-            //     //Debug.LogWarning("color modified to" + bla);
-            //     maxIteration--;
-            // }
+            while (!isInGreyScale && (maxIteration > 0)) {
+                int newCoordX = (int)valueCoord.x + 10;
+                int newCoordY = (int)valueCoord.y + 10;
+                bla = screenshot.GetPixel(newCoordX, newCoordY);
+                RValue = bla.r;
+                GValue = bla.g;
+                BValue = bla.b;
+                isInGreyScale = (RValue - GValue) < 0.3;
+                // RValue = bla.r;
+                //Debug.LogWarning("color modified to" + bla);
+                maxIteration--;
+            }
             this.setColor(bla);
         }
     }

@@ -1,5 +1,3 @@
-
-
 using System.Collections.Generic;
 using SS.Geom;
 using UnityEngine;
@@ -61,7 +59,7 @@ namespace SS.AppObject {
             lr.SetPositions(polyline.getPts().ToArray());
             lr.startWidth = this.mWidth;
             lr.endWidth = this.mWidth;
-            lr.material = new Material(Shader.Find("Unlit/Color"));
+            lr.material = new Material(Shader.Find("UI/Unlit/Transparent"));
             lr.material.color = this.mColor;
         }
     }

@@ -13,6 +13,8 @@ namespace SS {
             this.addScenario(SSNavigateScenario.createSingleton(ss));
             this.addScenario(SSDrawScenario.createSingleton(ss));
             this.addScenario(SSSphereHandleScenario.createSingleton(ss));
+            this.addScenario(SSSperspectiveDecideScenario.createSingleton(ss));
+            this.addScenario(SSStickHandleScenario.createSingleton(ss));
             this.addScenario(SSEraseScenario.createSingleton(ss));
         }
 

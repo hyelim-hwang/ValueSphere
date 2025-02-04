@@ -10,9 +10,9 @@ namespace SS.Cmd {
         //private constructor
         private SSCmdToTumbleCamera(XApp app) : base(app) {
             SSApp ss = (SSApp)this.mApp;
-            SSPenMark penMark = ss.getPenMarkMgr().getLastPenMark();
-            this.mPrevPt = penMark.getRecentPt(1);
-            this.mCurPt = penMark.getRecentPt(0);
+            SSTouchMark touchMark = ss.getTouchMarkMgr().getLastDownTouchMark();
+            this.mPrevPt = touchMark.getRecentPt(1);
+            this.mCurPt = touchMark.getRecentPt(0);
         }
 
         //static method to construct and execute this command
@@ -23,7 +23,7 @@ namespace SS.Cmd {
 
         protected override bool defineCmd() {
             SSApp ss = (SSApp)this.mApp;
-            SSPerspCameraPerson cp = ss.getPerspCameraPerson();
+            SSGridCameraPerson cp = ss.getGridCameraPerson();
 
             float dx = this.mCurPt.x - this.mPrevPt.x;
             float dy = this.mCurPt.y - this.mPrevPt.y;
@@ -38,7 +38,8 @@ namespace SS.Cmd {
             Vector3 nextView = qa * qz * cp.getView();
 
             cp.setEye(nextEye);
-            cp.setView(nextView);
+            //cp.setView(nextView);
+
 
             return true;
         }

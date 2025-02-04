@@ -3,6 +3,8 @@ using X;
 using SS.Cmd;
 using UnityEngine.InputSystem;
 using SS.AppObject;
+using SSAppObject;
+using System.Collections.Generic;
 
 namespace SS.Scenario {
     public partial class SSDefaultScenario : XScenario {
@@ -53,12 +55,23 @@ namespace SS.Scenario {
                         XCmdToChangeScene.execute(ss,
                             SSEraseScenario.EraseScene.getSingleton(), this);
                         break;
+                    case Key.LeftCtrl:
+                        XCmdToChangeScene.execute(ss,
+                            SSSperspectiveDecideScenario.CubeHandleReadyScene.
+                            getSingleton(), this);
+                        break;
                 }
             }
 
             public override void handleKeyUp(Key kc) {
                 SSApp ss = (SSApp)this.mScenario.getApp();
                 switch(kc) {
+                    case Key.Enter:
+                        SSCmdToConfirmPlane.execute(ss);
+                        break;
+                    case Key.Tab:
+                        SSCmdToCreateShadowTrace.execute(ss);
+                        break;
                     case Key.S:
                         SSCmdToSaveFile.execute(ss);
                         break;
@@ -81,6 +94,9 @@ namespace SS.Scenario {
                     case Key.Y:
                         SSCmdToRedo.execute(ss);
                         break;
+                    case Key.P:
+                        SSCmdToRedo.execute(ss);
+                        break;
 
                 }
             }
@@ -88,6 +104,10 @@ namespace SS.Scenario {
             public override void handlePenDown(Vector2 pt) {
                 SSApp ss = (SSApp)this.mScenario.getApp();
                 SSValueSphere vs = ss.getValueSphereMgr().getValueSphere();
+                SSStick stick = ss.getShadowStickMgr().getShadowStick();
+                Camera gridCam = ss.getGridCameraPerson().getCamera();
+                Vector3 ptInVector3 = new Vector3(pt.x, pt.y, gridCam.depth);
+
                 //if pen touches the inner sphere area
                 Vector3 penDownInWorldPt = ss.getPerspCameraPerson().getCamera().
                     ScreenToWorldPoint(new Vector3(pt.x, pt.y, 2.0f));
@@ -103,6 +123,13 @@ namespace SS.Scenario {
                     SSCmdToPickColor.execute(ss);
                     XCmdToChangeScene.execute(ss,
                         SSDrawScenario.DrawScene.getSingleton(), this);
+                } else if ((ptInVector3 - gridCam.WorldToScreenPoint(
+                    stick.getGameObject().transform.position)).magnitude < 100f) {
+                        XCmdToChangeScene.execute(ss,
+                        SSStickHandleScenario.ConstructStickScene.getSingleton(), this);
+                } else {
+                    XCmdToChangeScene.execute(ss,
+                        SSDrawScenario.DrawShadowScene.getSingleton(), this);
                 }
             }
 
@@ -125,26 +152,55 @@ namespace SS.Scenario {
             public override void handleTouchDown() {
                 SSApp ss = (SSApp)this.mScenario.getApp();
                 SSValueSphere vs = ss.getValueSphereMgr().getValueSphere();
+                SSStick stick = ss.getShadowStickMgr().getShadowStick();
+                SSShadowStickMgr SSMgr = ss.getShadowStickMgr();
                 if (ss.getTouchMarkMgr().wasTouchDownJustNow()) {
                     SSTouchMark tm =
-                    ss.getTouchMarkMgr().getLastDownTouchMark();
+                        ss.getTouchMarkMgr().getLastDownTouchMark();
                     Vector3 tmInWorld = ss.getPerspCameraPerson().getCamera().
-                    ScreenToWorldPoint(tm.getFirstPt());
+                        ScreenToWorldPoint(tm.getFirstPt());
                     Vector3 tmInWorldAligned =
                         new Vector3(tmInWorld.x, tmInWorld.y, 2f);
-                    //if the touch is in the sphere area,
-                    //take the sphere out from
-                    //the canvas corner.
+                    Vector2 baseOfStickInScreenPt = ss.getGridCameraPerson().
+                        getCamera().WorldToScreenPoint(stick.getBaseOfStick());
+
+                    //boundary flag :  0 = base, 1 = edge top, 2 = edge bottom
+                    string[] stickComponents = new string[3];
+
+                    stickComponents[0] = "Base of Stick";
+                    stickComponents[1] = "Top of Stick";
+                    stickComponents[2] = "Bottom of Stick";
+                    int componentIndex =
+                        ss.getShadowStickMgr().stickColliderChecker(
+                        tm.getLastPt());
+
+                    //if sphere selected
                     if (Vector3.Distance(tmInWorldAligned,
                         vs.getSphere().transform.position) < vs.getRadius()) {
                         XCmdToChangeScene.execute(ss,
                         SSSphereHandleScenario.MoveSphereScene.getSingleton(),
                         this);
+                    } else if (stickComponents[componentIndex] ==
+                        "Base of Stick") {
+                        XCmdToChangeScene.execute(ss,
+                            SSStickHandleScenario.TranslateStickScene.
+                            getSingleton(), this);
+                    } else if (stickComponents[componentIndex] ==
+                        "Top of Stick") {
+                        XCmdToChangeScene.execute(ss,
+                            SSStickHandleScenario.SlideEdgeTopScene.
+                            getSingleton(), this);
+                    } else if (stickComponents[componentIndex] ==
+                        "Bottom of Stick") {
+                        XCmdToChangeScene.execute(ss,
+                            SSStickHandleScenario.SlideEdgeBottomScene.
+                            getSingleton(), this);
                     } else {
-                        //navigate the canvas.
-                        //XCmdToChangeScene.execute(ss,
-                        //SSNavigateScenario.RotateReadyScene.getSingleton(),
-                        //this);
+                        Debug.Log("perspective mode");
+                        //changeFOV
+                        XCmdToChangeScene.execute(ss,
+                            SSSperspectiveDecideScenario.ScaleCubeReadyScene.
+                            getSingleton(), this);
                     }
                 }
             }
