@@ -5,12 +5,11 @@ using X;
 using UnityEngine.InputSystem;
 using SS.Cmd;
 
-namespace SS.Scenario
-{
-    public partial class SSSperspectiveDecideScenario : XScenario
-    {
-        public class ScaleCubeReadyScene : SSScene
-        {
+namespace SS.Scenario {
+    public partial class SSSperspectiveDecideScenario : XScenario {
+        public class ScaleCubeReadyScene : SSScene {
+            //fields
+            private string mCubeComponent = null;
             //singleton pattern
             private static ScaleCubeReadyScene mSingleton = null;
             public static ScaleCubeReadyScene getSingleton() {
@@ -38,12 +37,28 @@ namespace SS.Scenario
 
                 //make cube visible and hide grid again.
                 SSPerspectiveCubeMgr cubeMgr = ss.getSSPerspectiveCubeMgr();
-                // cubeMgr.makeGridTransparent();
-                // cubeMgr.makeCubeShow();
 
                 //check what cube component user is controlling.
-                cubeMgr.cubeCollideChecker();
-
+                Vector2 touchedScreenPt =
+                    ss.getTouchMarkMgr().getLastDownTouchMark().getLastPt();
+                this.mCubeComponent = cubeMgr.cubeCollideChecker(touchedScreenPt);
+                if (this.mCubeComponent == "POV") {
+                    XCmdToChangeScene.execute(ss,
+                        SSSperspectiveDecideScenario.ChangePOVScene.
+                        getSingleton(), null);
+                } else if (this.mCubeComponent == "Rotation") {
+                    XCmdToChangeScene.execute(ss,
+                        SSSperspectiveDecideScenario.ChangeRotationScene.
+                        getSingleton(), null);
+                } else if (this.mCubeComponent == "FOV") {
+                    XCmdToChangeScene.execute(ss,
+                        SSSperspectiveDecideScenario.ChangeFOVScene.
+                        getSingleton(), null);
+                } else {
+                    XCmdToChangeScene.execute(ss,
+                        SSSperspectiveDecideScenario.ChangePositionScene.
+                        getSingleton(), null);
+                }
             }
             public override void handleKeyDown(Key kc) {
             }
@@ -70,10 +85,6 @@ namespace SS.Scenario
             }
 
             public override void handleTouchDown() {
-                SSApp ss = (SSApp)this.mScenario.getApp();
-                XCmdToChangeScene.execute(ss,
-                    SSSperspectiveDecideScenario.ScaleCubeScene.getSingleton(),
-                    this.mReturnScene);
             }
 
             public override void handleTouchDrag() {
@@ -89,7 +100,7 @@ namespace SS.Scenario
                 if (scenario.getManipulatingTouchMarks().Contains(tm)) {
                     scenario.getManipulatingTouchMarks().Remove(tm);
                     XCmdToChangeScene.execute(ss,
-                    SSDefaultScenario.ReadyScene.getSingleton(), null);
+                        SSDefaultScenario.ReadyScene.getSingleton(), null);
                 }
             }
 

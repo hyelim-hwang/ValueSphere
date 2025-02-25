@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using SS.Cmd;
 using SS.Scenario;
 using SS.AppObject;
+using SSAppObject;
 
 namespace SS.Scenario {
     public partial class SSStickHandleScenario : XScenario {
@@ -75,11 +76,18 @@ namespace SS.Scenario {
                 if (scenario.getManipulatingTouchMarks().Contains(tm)) {
                     scenario.getManipulatingTouchMarks().Remove(tm);
                     XCmdToChangeScene.execute(ss,
-                    SSDefaultScenario.ReadyScene.getSingleton(), null);
+                        SSDefaultScenario.ReadyScene.getSingleton(), null);
                 }
             }
 
-            public override void wrapUp() {}
+            public override void wrapUp() {
+                SSApp ss = (SSApp)this.mScenario.getApp();
+                SSShadowStickMgr SSMgr= ss.getShadowStickMgr();
+                Debug.LogError(SSMgr.getLightDirection());
+                // foreach(SSStick stick in SSMgr.getSticks()) {
+                //     Debug.LogError("readyendtered" + stick.getLightVector());
+                // }
+            }
 
             //util function
         }

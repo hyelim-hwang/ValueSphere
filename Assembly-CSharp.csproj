@@ -59,13 +59,15 @@
     <UnityVersion>2021.3.33f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Users\sketc\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.0.5\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="C:\Users\sketc\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.1.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\scripts\SS\Scenario\SSDrawScenario.cs" />
+    <Compile Include="Assets\scripts\SS\Scenario\SSStickHandleScenario.DecideLocalLightPositionReadyScene.cs" />
     <Compile Include="Assets\scripts\SS\Scenario\SSSperspectiveDecideScenario.CubeHandleReadyScene.cs" />
     <Compile Include="Assets\scripts\SS\SSUtil.cs" />
     <Compile Include="Assets\scripts\SS\AppObject\SSAppGeom3D.cs" />
+    <Compile Include="Assets\scripts\SS\Scenario\SSPerspectiveDecideScenario.ChangeFOVScene.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToMoveStick.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToAddCurShadowCurveToShadowCurves.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToOpenFile.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="Assets\scripts\SS\SSShadowCurveMgr.cs" />
     <Compile Include="Assets\scripts\SS\Geom\SSRect3D.cs" />
     <Compile Include="Assets\scripts\SS\SSPrepCameraPerson.cs" />
+    <Compile Include="Assets\scripts\SS\Scenario\SSStickHandleScenario.DecideLocalLightPositionScene.cs" />
     <Compile Include="Assets\scripts\SS\File\SSSerializableQuaternion.cs" />
     <Compile Include="Assets\scripts\SS\Scenario\SSPerspectiveDecideScenario.DollyCameraScene.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToGenerateSphere.cs" />
@@ -88,6 +91,7 @@
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToCheckHighlight.cs" />
     <Compile Include="Assets\scripts\SS\SSValueStroke.cs" />
     <Compile Include="Assets\scripts\SS\AppObject\SSEquator.cs" />
+    <Compile Include="Assets\scripts\SS\Scenario\SSPerspectiveDecideScenario.ChangePositionScene.cs" />
     <Compile Include="Assets\scripts\SS\SSOrthoCameraPerson.cs" />
     <Compile Include="Assets\scripts\SS\Scenario\SSSphereHandleScenario.MoveNScaleScene.cs" />
     <Compile Include="Assets\scripts\SS\Scenario\SSPerspectiveDecideScenario.cs" />
@@ -101,11 +105,14 @@
     <Compile Include="Assets\scripts\SS\SSShadowTraceMgr.cs" />
     <Compile Include="Assets\scripts\X\XScenarioMgr.cs" />
     <Compile Include="Assets\scripts\SS\Scenario\SSStickHandleScenario.TranslateStickScene.cs" />
+    <Compile Include="Assets\scripts\SS\Cmd\SSCmdToUpdateSubStick.cs" />
     <Compile Include="Assets\scripts\SS\Scenario\SSPerspectiveDecideScenario.TumbleCameraScene.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToSlideEdgeTop.cs" />
     <Compile Include="Assets\scripts\SS\Geom\SSCircle3D.cs" />
+    <Compile Include="Assets\scripts\SS\Scenario\SSStickHandleScenario.ChangeLocalLightPositionScene.cs" />
     <Compile Include="Assets\scripts\SS\SSSnapShotMgr.cs" />
     <Compile Include="Assets\scripts\SS\File\SSSerializableValueSphere.cs" />
+    <Compile Include="Assets\scripts\SS\Scenario\SSStickHandleScenario.UpdateSubStickScene.cs" />
     <Compile Include="Assets\scripts\SS\AppObject\SSPerspectiveCube.cs" />
     <Compile Include="Assets\scripts\SS\SSEventListener.cs" />
     <Compile Include="Assets\scripts\X\XExecutable.cs" />
@@ -123,10 +130,12 @@
     <Compile Include="Assets\scripts\SS\SSCropCameraPerson.cs" />
     <Compile Include="Assets\scripts\SS\File\SSSerializableValueStroke.cs" />
     <Compile Include="Assets\scripts\SS\Scenario\SSDefaultScenario.ReadyScene.cs" />
+    <Compile Include="Assets\scripts\SS\Cmd\SSCmdToChangeRotation.cs" />
     <Compile Include="Assets\scripts\SS\SSTouchMark.cs" />
     <Compile Include="Assets\scripts\SS\AppObject\SSAppNoGeom3D.cs" />
     <Compile Include="Assets\scripts\SS\SSValueSphereMgr.cs" />
     <Compile Include="Assets\scripts\SS\SSMouseEventSource.cs" />
+    <Compile Include="Assets\scripts\SS\Cmd\SSCmdToChangeFOV.cs" />
     <Compile Include="Assets\scripts\SS\Scenario\SSSphereHandleScenario.MoveEquatorScene.cs" />
     <Compile Include="Assets\scripts\SS\Geom\SSPolyline2D.cs" />
     <Compile Include="Assets\scripts\SS\File\SSSerializableColor.cs" />
@@ -136,15 +145,20 @@
     <Compile Include="Assets\scripts\SS\SSKeyEventSource.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToCreateShadowTrace.cs" />
     <Compile Include="Assets\scripts\SS\Geom\SSGeom2D.cs" />
+    <Compile Include="Assets\scripts\SS\SSPerspectiveGrid.cs" />
     <Compile Include="Assets\scripts\SS\Scenario\SSDrawScenario.DrawScene.cs" />
+    <Compile Include="Assets\scripts\SS\AppObject\SSSubStick.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToScaleValueSphere.cs" />
+    <Compile Include="Assets\scripts\SS\Cmd\SSCmdToChangePosition.cs" />
     <Compile Include="Assets\scripts\SS\AppObject\SSShadowStick.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToUndo.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToAutoSave.cs" />
     <Compile Include="Assets\scripts\SS\Scenario\NavigateScenario.cs" />
+    <Compile Include="Assets\scripts\SS\Cmd\SSCmdToChangeLocalLightDirection.cs" />
     <Compile Include="Assets\scripts\SS\Geom\SSCircle2D.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToPickColor.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToScaleCube.cs" />
+    <Compile Include="Assets\scripts\SS\Cmd\SSCmdToChangeLightDirectionByShadow.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToIncreaseStrokeWidth.cs" />
     <Compile Include="Assets\scripts\SS\AppObject\SSAppObject.cs" />
     <Compile Include="Assets\scripts\X\XLogMgr.cs" />
@@ -157,6 +171,7 @@
     <Compile Include="Assets\scripts\SS\Scenario\SSPerspectiveDecideScenario.ScaleCubeScene.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToRedo.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToConfirmPlane.cs" />
+    <Compile Include="Assets\scripts\SS\Scenario\SSPerspectiveDecideScenario.ChangeRotationScene.cs" />
     <Compile Include="Assets\scripts\SS\SSCursorMgr.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToTumbleCamera.cs" />
     <Compile Include="Assets\scripts\SS\SSShadowStickMgr.cs" />
@@ -166,6 +181,7 @@
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToUpdateCurShadowCurve.cs" />
     <Compile Include="Assets\scripts\SS\Geom\SSRect2D.cs" />
     <Compile Include="Assets\scripts\X\XLog.cs" />
+    <Compile Include="Assets\scripts\SS\Scenario\SSStickHandleScenario.ChangeLightDirectionByShadowScene.cs" />
     <Compile Include="Assets\scripts\SS\SSScene.cs" />
     <Compile Include="Assets\scripts\X\XJson.cs" />
     <Compile Include="Assets\scripts\SS\AppObject\SSShadowTrace.cs" />
@@ -205,12 +221,15 @@
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToSlideEdgeBottom.cs" />
     <Compile Include="Assets\scripts\SS\AppObject\SSAppGeom2D.cs" />
     <Compile Include="Assets\scripts\SS\AppObject\SSAppPolyline3D.cs" />
+    <Compile Include="Assets\scripts\SS\Cmd\SSCmdToChangePOV.cs" />
     <Compile Include="Assets\scripts\SS\AppObject\SSAppCircle3D.cs" />
     <Compile Include="Assets\scripts\SS\File\SSSavedData.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToUpdateCurPtCurve2D.cs" />
+    <Compile Include="Assets\scripts\SS\Scenario\SSPerspectiveDecideScenario.ChangePOVScene.cs" />
     <Compile Include="Assets\scripts\SS\SSCameraPerson.cs" />
     <Compile Include="Assets\scripts\SS\Scenario\EmptyScene.cs" />
     <Compile Include="Assets\scripts\SS\AppObject\SSAppTrapezoid3D.cs" />
+    <Compile Include="Assets\scripts\SS\Cmd\SSCmdToCreateSubStick.cs" />
     <Compile Include="Assets\scripts\SS\Cmd\SSCmdToClearAllValueStroke.cs" />
   </ItemGroup>
   <ItemGroup>

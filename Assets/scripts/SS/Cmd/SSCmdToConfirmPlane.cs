@@ -22,9 +22,12 @@ namespace SS.Cmd {
         protected override bool defineCmd() {
             SSApp ss = (SSApp)this.mApp;
             //envision the grid and hide the cube.
+            SSShadowStickMgr stickMgr = ss.getShadowStickMgr();
             SSPerspectiveCubeMgr cubeMgr = ss.getSSPerspectiveCubeMgr();
             cubeMgr.makeGridShow();
             cubeMgr.makeCubeTransparent();
+            stickMgr.getShadowStick().getGameObject().SetActive(true);
+
             return true;
 
         }

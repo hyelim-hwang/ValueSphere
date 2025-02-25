@@ -45,7 +45,7 @@ namespace SS.AppObject {
             this.mGameObject.AddComponent<MeshFilter>();
             this.mGameObject.AddComponent<MeshRenderer>();
             // this.mGameObject.AddComponent<Rigidbody2D>();
-            // this.mGameObject.AddComponent<BoxCollider2D>();
+            this.mGameObject.AddComponent<MeshCollider>();
 
             MeshRenderer mr = this.mGameObject.GetComponent<MeshRenderer>();
             Material mat = new Material(Shader.Find("UI/Unlit/Transparent"));
@@ -77,9 +77,9 @@ namespace SS.AppObject {
         }
 
         protected override void refreshCollider() {
-            SSTrapezoid rect = (SSTrapezoid) this.mGeom;
-            // BoxCollider2D bc = this.mGameObject.GetComponent<BoxCollider2D>();
-            // bc.size = new Vector2(rect.getWidth(), rect.getHeight());
+            SSTrapezoid trapezoid = (SSTrapezoid) this.mGeom;
+            MeshCollider mc = this.mGameObject.GetComponent<MeshCollider>();
+            mc.sharedMesh = this.mGameObject.GetComponent<MeshFilter>().mesh;
         }
     }
 }

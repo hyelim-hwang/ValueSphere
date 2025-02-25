@@ -6,6 +6,10 @@ using Unity.VisualScripting;
 namespace SS {
     public class SSPerspectiveCubeMgr {
         // constants
+        public static readonly Color CUBE_EDGE_COLOR = Color.black;
+        public static readonly float CUBE_EDGE_WIDTH = 0.05f;
+        public static readonly Color VANISHING_LINE_COLOR = Color.gray;
+        public static readonly float VANISHING_LINE_WIDTH = 0.03f;
 
         //fields
         private SSApp mSS = null;
@@ -16,20 +20,18 @@ namespace SS {
         public void setPerspectiveCube(SSPerspectiveCube cube) {
             this.mPerspectiveCube = cube;
         }
+        public Vector3 mPOVControllerPos = Vector3.zero;
+        public Vector3 mFOVControllerPos = Vector3.zero;
 
         //constructor
         public SSPerspectiveCubeMgr(SSApp ss) {
             this.mSS = ss;
             this.mPerspectiveCube = new SSPerspectiveCube();
+            this.mPOVControllerPos = new Vector3(-0.5f, +0.5f, -0.5f);
+            this.mFOVControllerPos = new Vector3(-0.5f, -0.5f, -0.5f);
         }
 
         //util functions
-        public enum BlendMode {
-            Opaque = 0,
-            Cutout,
-            Fade,
-            Transparent
-        }
 
         public void makeGridTransparent() {
             SSApp ss = this.mSS;
@@ -50,106 +52,65 @@ namespace SS {
             GameObject cube = ss.getSSPerspectiveCubeMgr().getPerspectiveCube().
                 getCube();
             cube.SetActive(false);
+            foreach (Transform child in
+                this.getPerspectiveCube().getGameObject().transform) {
+                child.gameObject.SetActive(false);
+            }
+            //turn on the grid
+            SSGrid grid = this.getPerspectiveCube().getGrid();
+            grid.getGameObject().SetActive(true);
+            Debug.LogError(grid == null);
+            foreach (SSAppPolyline3D child in grid.getChildren()) {
+                child.getGameObject().SetActive(true);
+            }
         }
 
         public void makeCubeShow() {
             SSApp ss = this.mSS;
             GameObject cube = ss.getSSPerspectiveCubeMgr().getPerspectiveCube().
                 getCube();
-            changeRenderMode(cube.GetComponent<Renderer>().material,
-                BlendMode.Opaque);
+            SSUtil.changeRenderMode(cube.GetComponent<Renderer>().material,
+                SSUtil.BlendMode.Opaque);
             cube.SetActive(true);
         }
 
-        public static void changeRenderMode(Material standardShaderMaterial,
-            BlendMode blendMode) {
-            switch (blendMode) {
-                case BlendMode.Opaque:
-                    standardShaderMaterial.SetFloat("_Mode", 0.0f);
-                    standardShaderMaterial.SetOverrideTag(
-                        "RenderType", "Opaque");
-                    standardShaderMaterial.SetInt("_SrcBlend",
-                        (int)UnityEngine.Rendering.BlendMode.One);
-                    standardShaderMaterial.SetInt("_DstBlend",
-                        (int)UnityEngine.Rendering.BlendMode.Zero);
-                    standardShaderMaterial.SetInt("_ZWrite", 1);
-                    standardShaderMaterial.DisableKeyword("_ALPHATEST_ON");
-                    standardShaderMaterial.DisableKeyword("_ALPHABLEND_ON");
-                    standardShaderMaterial.DisableKeyword(
-                        "_ALPHAPREMULTIPLY_ON");
-                    standardShaderMaterial.renderQueue = -1;
-                    break;
-                case BlendMode.Cutout:
-                    standardShaderMaterial.SetFloat("_Mode", 1.0f);
-                    standardShaderMaterial.SetOverrideTag("RenderType",
-                        "Opaque");
-                    standardShaderMaterial.SetInt("_SrcBlend",
-                        (int)UnityEngine.Rendering.BlendMode.One);
-                    standardShaderMaterial.SetInt("_DstBlend",
-                        (int)UnityEngine.Rendering.BlendMode.Zero);
-                    standardShaderMaterial.SetInt("_ZWrite", 1);
-                    standardShaderMaterial.EnableKeyword("_ALPHATEST_ON");
-                    standardShaderMaterial.DisableKeyword("_ALPHABLEND_ON");
-                    standardShaderMaterial.DisableKeyword(
-                        "_ALPHAPREMULTIPLY_ON");
-                    standardShaderMaterial.renderQueue = 2450;
-                    break;
-                case BlendMode.Fade:
-                    standardShaderMaterial.SetFloat("_Mode", 2.0f);
-                    standardShaderMaterial.SetOverrideTag("RenderType",
-                        "Transparent");
-                    standardShaderMaterial.SetInt("_SrcBlend",
-                        (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                    standardShaderMaterial.SetInt("_DstBlend",
-                        (int)UnityEngine.Rendering.BlendMode.
-                        OneMinusSrcAlpha);
-                    standardShaderMaterial.SetInt("_ZWrite", 0);
-                    standardShaderMaterial.DisableKeyword("_ALPHATEST_ON");
-                    standardShaderMaterial.EnableKeyword("_ALPHABLEND_ON");
-                    standardShaderMaterial.DisableKeyword(
-                        "_ALPHAPREMULTIPLY_ON");
-                    standardShaderMaterial.renderQueue = 3000;
-                    break;
-                case BlendMode.Transparent:
-                    standardShaderMaterial.SetFloat("_Mode", 3.0f);
-                    standardShaderMaterial.SetOverrideTag("RenderType",
-                        "Transparent");
-                    standardShaderMaterial.SetInt("_SrcBlend",
-                        (int)UnityEngine.Rendering.BlendMode.One);
-                    standardShaderMaterial.SetInt("_DstBlend",
-                        (int)UnityEngine.Rendering.BlendMode.
-                        OneMinusSrcAlpha);
-                    standardShaderMaterial.SetInt("_ZWrite", 0);
-                    standardShaderMaterial.DisableKeyword("_ALPHATEST_ON");
-                    standardShaderMaterial.DisableKeyword("_ALPHABLEND_ON");
-                    standardShaderMaterial.EnableKeyword(
-                        "_ALPHAPREMULTIPLY_ON");
-                    standardShaderMaterial.renderQueue = 3000;
-                    break;
-            }
-        }
-        public void cubeCollideChecker() {
+        public string cubeCollideChecker(Vector2 touchedScreenPt) {
             //perspective cube's world coordinate vertices.
-            Vector3 POVController = new Vector3(-0.5f, 0.5f, -0.5f);
-            Vector3 FOVController = new Vector3(-0.5f, -0.5f, -0.5f);
+            this.tagHandleByCamPos();
             //make a ray from the grid camera.
             Camera cam = this.mSS.getGridCameraPerson().getCamera();
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit)) {
-                GameObject cube = this.mPerspectiveCube.getCube();
-                Transform cubeTransform = cube.transform;
-                Vector3 localHitPoint =
-                cubeTransform.InverseTransformPoint(hit.point);
-                if (Vector3.Distance(localHitPoint, POVController) < 0.1f) {
-                    Debug.Log("Controlling POV");
-                    return;
-                } else if (
-                    Vector3.Distance(localHitPoint, FOVController) < 0.1f) {
-                    Debug.Log("Controlling FOV");
-                    return;
-                }
-                Debug.Log("Controlling Rotation");
+            Vector2 POVControllerPosInScreen =
+                cam.WorldToScreenPoint(this.mPOVControllerPos);
+            Vector2 FOVControllerPosInScreen =
+                cam.WorldToScreenPoint(this.mFOVControllerPos);
+            float distanceFromPointToRotationController =
+                SSUtil.DistanceFromPointToLine(POVControllerPosInScreen,
+                FOVControllerPosInScreen, touchedScreenPt);
+            if (Vector2.Distance(touchedScreenPt, POVControllerPosInScreen) < 30f) {
+                Debug.Log("Controlling POV");
+                return "POV";
+            } else if (
+                Vector2.Distance(touchedScreenPt, FOVControllerPosInScreen) < 30f) {
+                Debug.Log("Controlling FOV");
+                return "FOV";
+            } else if (
+                distanceFromPointToRotationController < 30f) {
+                Debug.Log("Rotation");
+                return "Rotation";
+            } else {
+                return "nothing";
             }
         }
+
+        public void tagHandleByCamPos() {
+            Camera cam = this.mSS.getGridCameraPerson().getCamera();
+            float camYPos = cam.transform.position.y;
+            if(camYPos < 0) {
+                this.mPOVControllerPos = new Vector3(-0.5f, -0.5f, -0.5f);
+                this.mFOVControllerPos = new Vector3(-0.5f, +0.5f, -0.5f);
+            }
+        }
+
+
     }
 }

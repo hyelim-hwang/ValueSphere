@@ -21,7 +21,7 @@ namespace SS.Cmd {
 
         protected override bool defineCmd() {
             SSApp ss = (SSApp)this.mApp;
-            SSShadowStickMgr SSMgr = ss.getShadowStickMgr();
+            SSShadowStickMgr stickMgr = ss.getShadowStickMgr();
             SSStickHandleScenario scenario =
                 (SSStickHandleScenario)SSStickHandleScenario.getSingleton();
             SSStick stick = ((SSApp)scenario.getApp()).getShadowStickMgr().
@@ -65,6 +65,10 @@ namespace SS.Cmd {
                 new Vector3(baseOfStick.x, baseOfStick.y, baseOfStick.z);
             stick.setBaseOfStick(stickPos);
             Vector3 curPos = stickPos;
+            Vector3 newLightDirection =
+                (stick.getEdgeTop() + stick.getBaseOfStick() -
+                stickMgr.getLightPosition()).normalized;
+            stick.setLightDirection(newLightDirection);
             return true;
         }
 

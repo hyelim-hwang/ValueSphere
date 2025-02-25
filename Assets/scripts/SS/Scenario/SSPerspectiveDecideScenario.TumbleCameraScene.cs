@@ -5,12 +5,9 @@ using X;
 using UnityEngine.InputSystem;
 using SS.Cmd;
 
-namespace SS.Scenario
-{
-    public partial class SSSperspectiveDecideScenario : XScenario
-    {
-        public class TumbleCameraScene : SSScene
-        {
+namespace SS.Scenario {
+    public partial class SSSperspectiveDecideScenario : XScenario {
+        public class TumbleCameraScene : SSScene {
             //singleton pattern
             private static TumbleCameraScene mSingleton = null;
             public static TumbleCameraScene getSingleton() {

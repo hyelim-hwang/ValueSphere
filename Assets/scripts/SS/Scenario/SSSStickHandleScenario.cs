@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.Android;
 using X;
 
 namespace SS.Scenario {
@@ -35,6 +36,16 @@ namespace SS.Scenario {
                 SlideEdgeBottomScene.createSingleton(this));
             this.addScene(SSStickHandleScenario.
                 ConstructStickScene.createSingleton(this));
+            this.addScene(SSStickHandleScenario.
+                ChangeSunlightPositionScene.createSingleton(this));
+            this.addScene(SSStickHandleScenario.
+                ChangeLocalLightPositionScene.createSingleton(this));
+            // this.addScene(SSStickHandleScenario.
+            //     DecideLocalLightPositionReadyScene.createSingleton(this));
+            // this.addScene(SSStickHandleScenario.
+            //     DecideLocalLightPositionScene.createSingleton(this));
+            // this.addScene(SSStickHandleScenario.UpdateSubStickScene
+            //     .createSingleton(this));
         }
     }
 }

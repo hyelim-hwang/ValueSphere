@@ -30,14 +30,28 @@ namespace SS.Cmd {
             Vector3 globalPosOfStick = stick.getGameObject().transform.position;
             SSStick constructedStick = new SSStick("constuctedStick",
             ss.getShadowStickMgr().getPlane(), stick.getLightVector());
+
             constructedStick.setEdgeTop(stick.getEdgeTop());
             constructedStick.setEdgeBottom(stick.getEdgeBottom());
             constructedStick.updateWidgetWithChangedPoints();
+
             //make constructed stick more transparent.
             makeStickTransparent(constructedStick);
             constructedStick.getGameObject().transform.position =
                 globalPosOfStick;
-                sticks.Add(stick);
+
+            //shadowTrace
+            Vector3 globalShadowTop =
+                this.transformLocalToWorldByBOS(constructedStick.getShadowTop());
+            Vector3 globalShadowBottom =
+                this.transformLocalToWorldByBOS(constructedStick.getShadowBottom());
+
+            SSShadowTrace shadowTrace =
+                new SSShadowTrace("trace", globalShadowTop, globalShadowBottom);
+            constructedStick.setShadowTrace(shadowTrace);
+            constructedStick.addChild(constructedStick.getShadowTrace());
+            sticks.Add(constructedStick);
+
             return true;
         }
 
@@ -77,7 +91,8 @@ namespace SS.Cmd {
         private void makeLineTransparent(SSAppPolyline3D line) {
             Material faceMat = line.getGameObject().
                 GetComponent<LineRenderer>().material;
-            LineRenderer lineRenderer = line.getGameObject().GetComponent<LineRenderer>();
+            LineRenderer lineRenderer =
+                line.getGameObject().GetComponent<LineRenderer>();
             // faceMat.SetFloat("_Mode", 3);
             // faceMat.SetInt("_SrcBlend",
             //     (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
@@ -97,6 +112,11 @@ namespace SS.Cmd {
             Color endColor = lineRenderer.endColor;
             endColor.a = 0.5f; // Alpha 값 적용
             lineRenderer.endColor = endColor;
+        }
+        public Vector3 transformLocalToWorldByBOS(Vector3 local) {
+            Vector3 baseOfStick =
+                ((SSApp)this.mApp).getShadowStickMgr().getShadowStick().getBaseOfStick();
+            return local + baseOfStick;
         }
     }
 }

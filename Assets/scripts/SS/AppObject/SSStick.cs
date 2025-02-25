@@ -34,6 +34,21 @@ namespace SSAppObject {
         }
         public void setLightDirection(Vector3 dir) {
             this.mLightVector = dir;
+            this.mShadowTop = calculateShadowTop();
+            this.mShadowBottom = calculateShadowBottom();
+            updateWidgetWithChangedPoints();
+            //update the shadowTrace too.
+            if (this.mShadowTrace != null) {
+                //make it to global position.
+                Vector3 shadowTopInGlobalPos =
+                    this.getShadowTop() +
+                    this.getGameObject().transform.position;
+                Vector3 shadowBottomInGlobalPos =
+                    this.getShadowBottom() +
+                    this.getGameObject().transform.position;
+                this.mShadowTrace.setTraceTop(shadowTopInGlobalPos);
+                this.mShadowTrace.setTraceBottom(shadowBottomInGlobalPos);
+            }
         }
 
         //special points
@@ -59,8 +74,7 @@ namespace SSAppObject {
         }
         public void setBaseOfStick(Vector3 stickBase) {
             this.mBaseOfStick = stickBase;
-            this.mGameObject.transform.position = stickBase;
-            // this.updateSpecialPointsByBaseOfStick();
+            this.getGameObject().transform.position = this.mBaseOfStick;
         }
         private Vector3 mShadowTop;
         public Vector3 getShadowTop() {
@@ -69,13 +83,20 @@ namespace SSAppObject {
         public void setShadowTop(Vector3 top) {
             this.mShadowTop = top;
         }
-
         private Vector3 mShadowBottom;
         public Vector3 getShadowBottom() {
             return this.mShadowBottom;
         }
         public void setShadowBottom(Vector3 bot) {
             this.mShadowBottom = bot;
+            //maybe needed in the light direction change scene.
+        }
+        private SSShadowTrace mShadowTrace;
+        public SSShadowTrace getShadowTrace() {
+            return this.mShadowTrace;
+        }
+        public void setShadowTrace(SSShadowTrace shadowTrace) {
+            this.mShadowTrace = shadowTrace;
         }
 
         //face
@@ -104,6 +125,15 @@ namespace SSAppObject {
         public SSAppPolyline3D getBottomLightDirection() {
             return this.mBottomLightDirection;
         }
+
+        // //auxilary stick
+        // private SSSubStick mSubStick = null;
+        // public SSSubStick getSubStick() {
+        //     return this.mSubStick;
+        // }
+        // public void setSubStick(SSSubStick stick) {
+        //     this.mSubStick = stick;
+        // }
 
         // constructor
         public SSStick(string name, Plane plane, Vector3 lightVector) :
@@ -239,19 +269,55 @@ namespace SSAppObject {
             pts.Add(this.mShadowTop);
             pts.Add(this.mShadowBottom);
             this.mFace.setPts(pts);
-
-
         }
 
-        // protected void updateSpecialPointsByBaseOfStick() {
-        //     this.mEdgeTop = this.mBaseOfStick +
-        //         Vector3.up * SSShadowStickMgr.DEFAULT_TOP_HEIGHT;
-        //     this.mEdgeBottom = this.mBaseOfStick +
-        //         Vector3.up * SSShadowStickMgr.DEFAULT_BOTTOM_HEIGHT;
-        //     this.mShadowTop = calculateShadowTop();
-        //     this.mShadowBottom = calculateShadowBottom();
-        //     //need to update appobjects by updated special points.
-        //     this.mGameObject.transform
-        // }
+        public Vector3 calcStickComponentPositionInWorld(Vector3 stickComponentPos) {
+            Vector3 stickComponentPosInWorld =
+                stickComponentPos + this.getGameObject().transform.position;
+                return stickComponentPosInWorld;
+        }
+
+        public void makeStickTransparent(SSStick stick) {
+            SSAppTrapezoid3D face = stick.getFace();
+            SSAppPolyline3D topLightDir = stick.getTopLightDirection();
+            SSAppPolyline3D bottomLightDir = stick.getBottomLightDirection();
+            SSAppPolyline3D verticalStick = stick.getVerticalStick();
+            SSAppPolyline3D shadowDir = stick.getShadowDirection();
+            Material faceMat = face.getGameObject().
+                GetComponent<MeshRenderer>().material;
+            faceMat.SetFloat("_Mode", 3);
+            faceMat.SetInt("_SrcBlend",
+                (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            faceMat.SetInt("_DstBlend",
+                (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            faceMat.SetInt("_ZWrite", 0);
+            faceMat.DisableKeyword("_ALPHATEST_ON");
+            faceMat.EnableKeyword("_ALPHABLEND_ON");
+            faceMat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            faceMat.renderQueue = 3000;
+            // Alpha 값 적용
+            Color color = faceMat.color;
+            color.a =  0.1f;
+            faceMat.color = color;
+            makeLineTransparent(topLightDir);
+            makeLineTransparent(bottomLightDir);
+            makeLineTransparent(verticalStick);
+            makeLineTransparent(shadowDir);
+        }
+        public void makeLineTransparent(SSAppPolyline3D line) {
+            Material faceMat = line.getGameObject().
+                GetComponent<LineRenderer>().material;
+            LineRenderer lineRenderer = line.getGameObject().GetComponent<LineRenderer>();
+            faceMat.renderQueue = 3000;
+            // Alpha 값 적용
+            Color color = faceMat.color;
+            color.a =  0.5f;
+            Color startColor = lineRenderer.startColor;
+            startColor.a = 0.5f; // Alpha 값 적용
+            lineRenderer.startColor = startColor;
+            Color endColor = lineRenderer.endColor;
+            endColor.a = 0.5f; // Alpha 값 적용
+            lineRenderer.endColor = endColor;
+        }
     }
 }

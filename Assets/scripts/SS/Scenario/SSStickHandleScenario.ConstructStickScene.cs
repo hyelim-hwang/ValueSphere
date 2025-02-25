@@ -43,7 +43,7 @@ namespace SS.Scenario {
             public override void handlePenUp(Vector2 pt) {
                 SSApp ss = (SSApp)this.mScenario.getApp();
                 SSCmdToConstructStick.execute(ss);
-                SSCmdToCreateShadowTrace.execute(ss);
+                //SSCmdToCreateShadowTrace.execute(ss);
                 XCmdToChangeScene.execute(ss, this.mReturnScene, null);
             }
 

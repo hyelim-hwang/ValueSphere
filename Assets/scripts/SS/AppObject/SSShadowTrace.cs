@@ -24,7 +24,7 @@ namespace SS.AppObject {
             return this.mTraceBottom;
         }
         public void setTraceBottom(Vector3 bot) {
-            this.mTraceTop = bot;
+            this.mTraceBottom = bot;
             this.refreshShadowTraceByChangedPoints();
         }
         private SSAppPolyline3D mTraceLine = null;

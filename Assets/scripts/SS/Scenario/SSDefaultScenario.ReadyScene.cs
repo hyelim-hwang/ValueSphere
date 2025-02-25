@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using SS.AppObject;
 using SSAppObject;
 using System.Collections.Generic;
+using UnityEngine.InputSystem.Controls;
 
 namespace SS.Scenario {
     public partial class SSDefaultScenario : XScenario {
@@ -26,6 +27,7 @@ namespace SS.Scenario {
             //event handling methods
             public override void getReady() {
                 SSApp ss = (SSApp)this.mScenario.getApp();
+                SSShadowStickMgr stickMgr = ss.getShadowStickMgr();
                 SSCmdToAutoSave.execute(ss);
                 //construct valueSphere here and initialize the position if there
                 //exists sphere already.
@@ -69,9 +71,9 @@ namespace SS.Scenario {
                     case Key.Enter:
                         SSCmdToConfirmPlane.execute(ss);
                         break;
-                    case Key.Tab:
-                        SSCmdToCreateShadowTrace.execute(ss);
-                        break;
+                    // case Key.Tab:
+                    //     SSCmdToCreateShadowTrace.execute(ss);
+                    //     break;
                     case Key.S:
                         SSCmdToSaveFile.execute(ss);
                         break;
@@ -165,21 +167,25 @@ namespace SS.Scenario {
                         getCamera().WorldToScreenPoint(stick.getBaseOfStick());
 
                     //boundary flag :  0 = base, 1 = edge top, 2 = edge bottom
-                    string[] stickComponents = new string[3];
-
+                    string[] stickComponents = new string[6];
                     stickComponents[0] = "Base of Stick";
                     stickComponents[1] = "Top of Stick";
                     stickComponents[2] = "Bottom of Stick";
+                    stickComponents[3] = "Shadow of Stick";
+                    stickComponents[4] = "Light Plane";
+                    stickComponents[5] = "Out of Stick";
                     int componentIndex =
                         ss.getShadowStickMgr().stickColliderChecker(
                         tm.getLastPt());
+
+                    Debug.LogError(stickComponents[componentIndex]);
 
                     //if sphere selected
                     if (Vector3.Distance(tmInWorldAligned,
                         vs.getSphere().transform.position) < vs.getRadius()) {
                         XCmdToChangeScene.execute(ss,
-                        SSSphereHandleScenario.MoveSphereScene.getSingleton(),
-                        this);
+                            SSSphereHandleScenario.MoveSphereScene.getSingleton(),
+                            this);
                     } else if (stickComponents[componentIndex] ==
                         "Base of Stick") {
                         XCmdToChangeScene.execute(ss,
@@ -195,12 +201,26 @@ namespace SS.Scenario {
                         XCmdToChangeScene.execute(ss,
                             SSStickHandleScenario.SlideEdgeBottomScene.
                             getSingleton(), this);
+                    } else if (stickComponents[componentIndex] ==
+                        "Shadow of Stick") {
+                        XCmdToChangeScene.execute(ss,
+                            SSStickHandleScenario.
+                            ChangeSunlightPositionScene.
+                            getSingleton(), this);
+                    } else if (stickComponents[componentIndex] ==
+                        "Light Plane") {
+                        // XCmdToChangeScene.execute(ss,
+                        //     SSStickHandleScenario.
+                        //     DecideLocalLightPositionReadyScene.getSingleton(), this);
                     } else {
                         Debug.Log("perspective mode");
-                        //changeFOV
-                        XCmdToChangeScene.execute(ss,
+                        //if cube is active, enter perspective mode.
+                        if (ss.getSSPerspectiveCubeMgr().getPerspectiveCube().
+                            getCube().activeSelf) {
+                            XCmdToChangeScene.execute(ss,
                             SSSperspectiveDecideScenario.ScaleCubeReadyScene.
                             getSingleton(), this);
+                        }
                     }
                 }
             }

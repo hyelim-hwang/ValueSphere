@@ -93,13 +93,13 @@ namespace SS {
             return this.mShadowCurveMgr;
         }
 
-
+        //eventsources
         private SSKeyEventSource mKeyEventSource = null;
         private SSPenEventSource mPenEventSource = null;
         private SSTouchEventSource mTouchEventSource = null;
         private SSEventListener mEventListener = null;
 
-
+        //underlay
         private SSImage2D mHairdryerUnderlay = null;
         public SSImage2D getHairdryerUnderlay() {
             return this.mHairdryerUnderlay;
@@ -116,11 +116,50 @@ namespace SS {
         public SSImage2D getCylinderUnderlay() {
             return this.mCylinderUnderlay;
         }
+        private SSImage2D mCylinderFloatingUnderlay = null;
+        public SSImage2D getCylinderFloatingUnderlay() {
+            return this.mCylinderFloatingUnderlay;
+        }
+        private SSImage2D mFloatingCubeUnderlay = null;
+        public SSImage2D getFloatingCubeUnderlay() {
+            return this.mFloatingCubeUnderlay;
+        }
+        private SSImage2D mCylinderLayUnderlay = null;
+        public SSImage2D getCylinderLayUnderlay() {
+            return this.mCylinderLayUnderlay;
+        }
+        private SSImage2D mCompositionUnderlay = null;
+        public SSImage2D getComposition() {
+            return this.mCompositionUnderlay;
+        }
+        private SSImage2D mCubeFloorUnderlay = null;
+        public SSImage2D getCubeFloor() {
+            return this.mCubeFloorUnderlay;
+        }
+        private SSImage2D mConeFloorUnderlay = null;
+        public SSImage2D getConeFloor() {
+            return this.mConeFloorUnderlay;
+        }
+        private SSImage2D mConeFloatingUnderlay = null;
+        public SSImage2D getConeFloating() {
+            return this.mConeFloatingUnderlay;
+        }
+        private SSImage2D mConeCubeBigUnderlay= null;
+        public SSImage2D getConeCubeBig() {
+            return this.mConeCubeBigUnderlay;
+        }
+        private SSImage2D mCubeTowerUnderlay= null;
+        public SSImage2D getCubeTower() {
+            return this.mCubeTowerUnderlay;
+        }
+        private SSImage2D mAirplaneUnderlay= null;
+        public SSImage2D getAirplane() {
+            return this.mAirplaneUnderlay;
+        }
+
+        //rendertexture
         public RenderTexture renderTexture = null;
         public SSAppTexturedRect3D mCropTexture = null;
-
-
-
 
         private void configureUnity() {
             // necessary for manually refreshing collider physics
@@ -181,73 +220,86 @@ namespace SS {
             // underlay
             Vector2 screenSize = new Vector2(Screen.width, Screen.height);
             Vector2 screenSize2 =
-            new Vector2(Screen.width / 1.5f, Screen.height);
+                new Vector2(Screen.width / 1.5f, Screen.height);
             Vector2 screenSize3 =
-            new Vector2(Screen.width / 1.2f, Screen.height / 1.2f);
+                new Vector2(Screen.width / 1.2f, Screen.height / 1.2f);
             Vector2 screenSize4 = new Vector2(837f, 814f);
             Vector2 screenSize5 = new Vector2(682f, 925f);
-            Vector2 screenSize6 = new Vector2(1358f, 1793f);
+            Vector2 screenSize6 = new Vector2(1358f / 2f, 1793f / 2f);
             Vector2 screenSize7 = new Vector2(1620, 1471f);
             Vector2 screenSize8 = new Vector2(2923, 1744);
             Vector2 screenSize9 = new Vector2(372, 346);
             Vector2 screenSize10 = new Vector2(246, 407);
             Vector2 screenSize11 = new Vector2(265, 364);
             Vector2 screenSize12 = new Vector2(1020, 1344);
+            Vector2 screenSize13 = new Vector2(1113, 697);
+
             this.mHairdryerUnderlay = new SSImage2D("Underlay", "hairdryer",
                 screenSize3, screenSize / 2.0f - new Vector2(20.0f, 0));
             this.mHairdryerUnderlay.getGameObject().SetActive(false);
+
             this.mRobotUnderlay = new SSImage2D("Underlay", "robot",
                 screenSize2, screenSize / 2f);
             this.mRobotUnderlay.getGameObject().SetActive(false);
+
             this.mBuildingUnderlay = new SSImage2D("Underlay", "building",
                 screenSize, screenSize / 2f);
             this.mBuildingUnderlay.getGameObject().SetActive(false);
+
             this.mCylinderUnderlay = new SSImage2D("Underlay", "cylinder",
                 screenSize4, new Vector3(1627f, 585f, 0f));
             this.mCylinderUnderlay.getGameObject().SetActive(false);
-            this.mCylinderUnderlay = new SSImage2D("Underlay", "cylinder_floating",
-                screenSize5, new Vector3(1627f, 585f, 0f));
-            this.mCylinderUnderlay.getGameObject().SetActive(false);
-            this.mCylinderUnderlay = new SSImage2D("Underlay", "foating_cube",
-                screenSize6, new Vector3(1627f, 585f, 0f));
-            this.mCylinderUnderlay.getGameObject().SetActive(false);
-            this.mCylinderUnderlay = new SSImage2D("Underlay", "cylinder_lay",
-                screenSize7, new Vector3(1627f, 585f, 0f));
-            this.mCylinderUnderlay.getGameObject().SetActive(false);
-            this.mCylinderUnderlay = new SSImage2D("Underlay", "composition",
-                screenSize8, new Vector3(1627f, 585f, 0f));
-            this.mCylinderUnderlay.getGameObject().SetActive(false);
-            this.mCylinderUnderlay = new SSImage2D("Underlay", "cube_floor",
-                screenSize9, new Vector3(1627f, 585f, 0f));
-            this.mCylinderUnderlay.getGameObject().SetActive(false);
-            this.mCylinderUnderlay = new SSImage2D("Underlay", "cone_floor",
-                screenSize9, new Vector3(1627f, 585f, 0f));
-            this.mCylinderUnderlay.getGameObject().SetActive(false);
-            this.mCylinderUnderlay = new SSImage2D("Underlay", "cone_floating",
-                screenSize10, new Vector3(1627f, 585f, 0f));
-            this.mCylinderUnderlay.getGameObject().SetActive(false);
-            this.mCylinderUnderlay = new SSImage2D("Underlay", "conCube_big",
-                screenSize11, new Vector3(1627f, 585f, 0f));
-            this.mCylinderUnderlay.getGameObject().SetActive(false);
-            this.mCylinderUnderlay = new SSImage2D("Underlay", "cubeTower",
-                screenSize12, new Vector3(1627f, 585f, 0f));
-            this.mCylinderUnderlay.getGameObject().SetActive(true);
 
+            this.mCylinderFloatingUnderlay =
+                new SSImage2D("Underlay", "cylinder_floating",
+                screenSize5, new Vector3(1627f, 585f, 0f));
+            this.mCylinderFloatingUnderlay.getGameObject().SetActive(false);
+
+            this.mFloatingCubeUnderlay =
+                new SSImage2D("Underlay", "foating_cube",
+                screenSize6 / 2, new Vector3(1627f / 2, 585f, 0f));
+            this.mFloatingCubeUnderlay.getGameObject().SetActive(false);
+
+            this.mCylinderLayUnderlay = new SSImage2D("Underlay", "cylinder_lay",
+                screenSize7, new Vector3(1627f, 585f, 0f));
+            this.mCylinderLayUnderlay.getGameObject().SetActive(false);
+
+            this.mCompositionUnderlay = new SSImage2D("Underlay", "composition",
+                screenSize8, new Vector3(1627f, 585f, 0f));
+            this.mCompositionUnderlay.getGameObject().SetActive(false);
+
+            this.mCubeFloorUnderlay = new SSImage2D("Underlay", "cube_floor",
+                screenSize9, new Vector3(1627f, 585f, 0f));
+            this.mCubeFloorUnderlay.getGameObject().SetActive(false);
+
+            this.mConeFloorUnderlay = new SSImage2D("Underlay", "cone_floor",
+                screenSize9, new Vector3(1627f, 585f, 0f));
+            this.mConeFloorUnderlay.getGameObject().SetActive(false);
+
+            this.mConeFloatingUnderlay = new SSImage2D("Underlay", "cone_floating",
+                screenSize10, new Vector3(1627f, 585f, 0f));
+            this.mConeFloatingUnderlay.getGameObject().SetActive(false);
+
+            this.mConeCubeBigUnderlay = new SSImage2D("Underlay", "conCube_big",
+                screenSize11, new Vector3(1627f, 585f, 0f));
+            this.mConeCubeBigUnderlay.getGameObject().SetActive(false);
+
+            this.mCubeTowerUnderlay = new SSImage2D("Underlay", "cubeTower",
+                screenSize12, new Vector3(1627f, 585f, 0f));
+            this.mCubeTowerUnderlay.getGameObject().SetActive(false);
+
+            this.mAirplaneUnderlay = new SSImage2D("Underlay", "airplane",
+                screenSize13 , new Vector3(1627f, 1500f, 0f) / 2);
+            this.mAirplaneUnderlay.getGameObject().SetActive(true);
 
             //perspectiveCube
-            Plane plane = new Plane(Vector3.up, Vector3.zero);
             this.mPerspectiveCubeMgr = new SSPerspectiveCubeMgr(this);
             this.mPerspectiveCubeMgr.makeGridTransparent();
 
-
             //ShadowStick
-            this.mShadowTraceMgr = new SSShadowTraceMgr(this);
             this.mShadowStickMgr = new SSShadowStickMgr(this);
+            this.mShadowTraceMgr = new SSShadowTraceMgr(this);
             this.mShadowCurveMgr = new SSShadowCurveMgr(this);
-            this.mShadowStickMgr.setPlane(plane);
-            SSStick stick = new SSStick("stick", plane,
-                SSShadowStickMgr.CONE_FLOOR_DIR);
-            this.mShadowStickMgr.setShadowStick(stick);
 
             // //crop camera
             // // SSAppTexturedRect3D 생성

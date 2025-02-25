@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using SS.AppObject;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace SS {
     public class SSGrid : SSAppNoGeom3D {
@@ -14,7 +15,7 @@ namespace SS {
         public static readonly Quaternion GRID_ROTATION =
             Quaternion.Euler(0, 0f, 0f);
             public static readonly Vector3 GRID_SCALE =
-            new Vector3(0.4f, 0.4f, 0.4f);
+            new Vector3(0.7f, 0.7f, 0.7f);
 
         //field
         private Quaternion mRot = Quaternion.identity;
@@ -34,8 +35,10 @@ namespace SS {
             this.mScale = Vector3.one;
             for (int i = 0; i < SSGrid.NUM_X_GRID_LINES; i++) {
                 List<Vector3> pts = new List<Vector3>();
-                pts.Add(new Vector3(-SSGrid.LENGTH / 2f, 0f, (float)i - 2f));
-                pts.Add(new Vector3(+SSGrid.LENGTH / 2f, 0f, (float)i - 2f));
+                pts.Add(new Vector3(-SSGrid.LENGTH / 2f, 0f,
+                    (float)i - (SSGrid.LENGTH / 2)));
+                pts.Add(new Vector3(+SSGrid.LENGTH / 2f, 0f,
+                    (float)i - (SSGrid.LENGTH / 2)));
 
                 SSAppPolyline3D line =
                     new SSAppPolyline3D("XGridLine", pts, SSGrid.WIDTH,
@@ -45,8 +48,10 @@ namespace SS {
 
             for (int i = 0; i < SSGrid.NUM_Z_GRID_LINES; i++) {
                 List<Vector3> pts = new List<Vector3>();
-                pts.Add(new Vector3((float)i - 2f, 0f, -SSGrid.LENGTH / 2f));
-                pts.Add(new Vector3((float)i - 2f, 0f, +SSGrid.LENGTH / 2f));
+                pts.Add(new Vector3((float)i - (SSGrid.LENGTH / 2), 0f,
+                    -SSGrid.LENGTH / 2f));
+                pts.Add(new Vector3((float)i - (SSGrid.LENGTH / 2), 0f,
+                    +SSGrid.LENGTH / 2f));
 
                 SSAppPolyline3D line =
                     new SSAppPolyline3D("ZGridLine", pts, SSGrid.WIDTH,

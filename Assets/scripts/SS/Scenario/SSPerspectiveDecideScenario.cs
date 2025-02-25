@@ -3,19 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using X;
 
-namespace SS.Scenario
-{
-    public partial class SSSperspectiveDecideScenario : XScenario
-    {
+namespace SS.Scenario {
+    public partial class SSSperspectiveDecideScenario : XScenario {
         //singleton pattern
         private static SSSperspectiveDecideScenario mSingleton = null;
-        public static SSSperspectiveDecideScenario getSingleton()
-        {
+        public static SSSperspectiveDecideScenario getSingleton() {
             Debug.Assert(SSSperspectiveDecideScenario.mSingleton != null);
             return SSSperspectiveDecideScenario.mSingleton;
         }
-        public static SSSperspectiveDecideScenario createSingleton(XApp app)
-        {
+        public static SSSperspectiveDecideScenario createSingleton(XApp app) {
             Debug.Assert(SSSperspectiveDecideScenario.mSingleton == null);
             SSSperspectiveDecideScenario.mSingleton =
                 new SSSperspectiveDecideScenario(app);
@@ -31,18 +27,25 @@ namespace SS.Scenario
             return this.mManipulatingTouchmarks;
         }
 
-        protected override void addScenes()
-        {
+        protected override void addScenes() {
+            // this.addScene(SSSperspectiveDecideScenario.
+            //     CubeHandleReadyScene.createSingleton(this));
+            // this.addScene(SSSperspectiveDecideScenario.
+            //     TumbleCameraScene.createSingleton(this));
+            // this.addScene(SSSperspectiveDecideScenario.
+            //     DollyCameraScene.createSingleton(this));
             this.addScene(SSSperspectiveDecideScenario.
-            CubeHandleReadyScene.createSingleton(this));
+                ScaleCubeReadyScene.createSingleton(this));
             this.addScene(SSSperspectiveDecideScenario.
-            TumbleCameraScene.createSingleton(this));
+                ScaleCubeScene.createSingleton(this));
             this.addScene(SSSperspectiveDecideScenario.
-            DollyCameraScene.createSingleton(this));
+                ChangePOVScene.createSingleton(this));
             this.addScene(SSSperspectiveDecideScenario.
-            ScaleCubeReadyScene.createSingleton(this));
+                ChangeRotationScene.createSingleton(this));
             this.addScene(SSSperspectiveDecideScenario.
-            ScaleCubeScene.createSingleton(this));
+                ChangeFOVScene.createSingleton(this));
+            this.addScene(SSSperspectiveDecideScenario.
+                ChangePositionScene.createSingleton(this));
         }
     }
 }

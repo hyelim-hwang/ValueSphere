@@ -5,12 +5,9 @@ using X;
 using UnityEngine.InputSystem;
 using SS.Cmd;
 
-namespace SS.Scenario
-{
-    public partial class SSSperspectiveDecideScenario : XScenario
-    {
-        public class CubeHandleReadyScene : SSScene
-        {
+namespace SS.Scenario {
+    public partial class SSSperspectiveDecideScenario : XScenario {
+        public class CubeHandleReadyScene : SSScene {
             //singleton pattern
             private static CubeHandleReadyScene mSingleton = null;
             public static CubeHandleReadyScene getSingleton() {

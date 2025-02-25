@@ -5,12 +5,9 @@ using X;
 using UnityEngine.InputSystem;
 using SS.Cmd;
 
-namespace SS.Scenario
-{
-    public partial class SSSperspectiveDecideScenario : XScenario
-    {
-        public class DollyCameraScene : SSScene
-        {
+namespace SS.Scenario {
+    public partial class SSSperspectiveDecideScenario : XScenario {
+        public class DollyCameraScene : SSScene {
             //singleton pattern
             private static DollyCameraScene mSingleton = null;
             public static DollyCameraScene getSingleton() {
